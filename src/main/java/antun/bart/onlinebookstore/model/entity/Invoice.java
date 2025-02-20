@@ -1,14 +1,12 @@
 package antun.bart.onlinebookstore.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "Invoice")
 @NoArgsConstructor

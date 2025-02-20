@@ -6,11 +6,5 @@ import antun.bart.onlinebookstore.model.entity.Invoice;
 
 public interface PurchaseService {
 
-    /**
-     * Purchase books from online book store shopping cart for regarding customer
-     *
-     * @param bookPurchaseRequest
-     * @return
-     */
     Invoice purchaseBooks(BookPurchaseRequest bookPurchaseRequest) throws BookNotFoundException;
 }

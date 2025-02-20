@@ -12,6 +12,7 @@ import antun.bart.onlinebookstore.service.BookService;
 import antun.bart.onlinebookstore.service.CustomerService;
 import antun.bart.onlinebookstore.service.InventoryService;
 import antun.bart.onlinebookstore.service.PurchaseService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -28,10 +29,10 @@ import static antun.bart.onlinebookstore.service.impl.CustomerServiceImpl.LOYALT
 import static antun.bart.onlinebookstore.util.MathOperations.calculatePercentage;
 import static antun.bart.onlinebookstore.util.MathOperations.roundValueOnTwoDecimals;
 
+@Slf4j
 @Service
 public class PurchaseServiceImpl implements PurchaseService {
 
-    Logger LOG = LoggerFactory.getLogger(PurchaseServiceImpl.class);
     private final BookService bookService;
     private final CustomerService customerService;
     private final InventoryService inventoryService;
@@ -67,11 +68,11 @@ public class PurchaseServiceImpl implements PurchaseService {
                 Integer purchasedBookQuantity = purchasedBook.getQuantity();
                 Book boughtBook = bookService.findBookByBookId(purchasedBookId);
                 Double oldPrice = boughtBook.getPrice();
-                LOG.debug("Book price: {}", oldPrice);
+                log.debug("Book price: {}", oldPrice);
                 Double bookDiscount = bookService.getBookDiscountByBookType(purchasedBook.getBookId(), purchasedBooks.size());
                 Double bookPriceWithDiscount = roundValueOnTwoDecimals(oldPrice * bookDiscount.doubleValue());
                 Double discountInPercentage = calculatePercentage(bookDiscount);
-                LOG.debug("Book price with discount: {}% is: {}", discountInPercentage, bookPriceWithDiscount);
+                log.debug("Book price with discount: {}% is: {}", discountInPercentage, bookPriceWithDiscount);
                 totalCost += roundValueOnTwoDecimals(purchasedBookQuantity * bookPriceWithDiscount);
                 items.add(new InvoiceItem(boughtBook, purchasedBookQuantity, oldPrice, discountInPercentage + "%", bookPriceWithDiscount, bookPriceWithDiscount * purchasedBookQuantity));
                 inventoryService.reduceBookFromInventory(purchasedBookId, purchasedBookQuantity);
@@ -86,10 +87,10 @@ public class PurchaseServiceImpl implements PurchaseService {
                 List<Book> regularOrOldBooks = getRegularOrOldBooks(boughtBooks);
                 if (!regularOrOldBooks.isEmpty()) {
                     Book cheapestBook = regularOrOldBooks.get(0);
-                    LOG.debug("Price of book {} that's for free: {}", cheapestBook.getBookName(), cheapestBook.getPrice());
+                    log.debug("Price of book {} that's for free: {}", cheapestBook.getBookName(), cheapestBook.getPrice());
                     purchasedBooks.remove(cheapestBook);
                     totalCost -= cheapestBook.getPrice();
-                    LOG.debug("Customer {} got book: {} for free", customer.getUsername(), cheapestBook.getBookName());
+                    log.debug("Customer {} got book: {} for free", customer.getUsername(), cheapestBook.getBookName());
                     customer = customerService.updateLoyaltyPoints(customer, totalPoints - LOYALTY_BONUS_LIMIT);
                 }
             } else {

@@ -11,13 +11,13 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class OnlineBookStoreApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(OnlineBookStoreApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(OnlineBookStoreApplication.class, args);
+    }
 
-	@Bean
-	public DataLoader testDataLoader(BookRepository bookRepository, InventoryRepository inventoryRepository, CustomerRepository customerRepository) {
-		return new DataLoader(bookRepository, inventoryRepository, customerRepository);
-	}
+    @Bean
+    public DataLoader testDataLoader(BookRepository bookRepository, InventoryRepository inventoryRepository, CustomerRepository customerRepository) {
+        return new DataLoader(bookRepository, inventoryRepository, customerRepository);
+    }
 
 }

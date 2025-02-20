@@ -3,12 +3,12 @@ package antun.bart.onlinebookstore.model.entity;
 import antun.bart.onlinebookstore.model.enums.BookType;
 import antun.bart.onlinebookstore.model.enums.Genre;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @Entity(name = "BOOK")
 public class Book {

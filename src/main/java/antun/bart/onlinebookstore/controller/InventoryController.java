@@ -1,7 +1,7 @@
 package antun.bart.onlinebookstore.controller;
 
-import antun.bart.onlinebookstore.model.entity.Book;
 import antun.bart.onlinebookstore.model.BookDto;
+import antun.bart.onlinebookstore.model.entity.Book;
 import antun.bart.onlinebookstore.repository.BookRepository;
 import antun.bart.onlinebookstore.service.InventoryService;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import static antun.bart.onlinebookstore.controller.ControllerDefinitions.INVENTORY_API;
-import static org.springframework.http.ResponseEntity.*;
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping(INVENTORY_API)
