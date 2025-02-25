@@ -1,65 +1,51 @@
 package antun.bart.onlinebookstore.exception;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-
+@Slf4j
 @EnableWebMvc
 @ControllerAdvice
 public class OnlineBookStoreExceptionHandler {
-
-    Logger LOG = LoggerFactory.getLogger(OnlineBookStoreExceptionHandler.class);
-
-    @ExceptionHandler(value
-            = {IllegalArgumentException.class})
-    public ResponseEntity handleIllegalArgumentException(IllegalArgumentException e) {
-        LOG.warn("IllegalArgumentException: {}", e.getMessage());
-        return ResponseEntity.status(BAD_REQUEST)
+    
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
+        log.warn("IllegalArgumentException: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(e.getMessage());
     }
 
-    @ExceptionHandler(value
-            = {BookNotFoundException.class})
-    public ResponseEntity handleBookNotFoundException(BookNotFoundException e) {
-        LOG.warn("IllegalArgumentException: {}", e.getMessage());
-        return ResponseEntity.status(NOT_FOUND)
+    @ExceptionHandler(BookNotFoundException.class)
+    public ResponseEntity<String> handleBookNotFoundException(BookNotFoundException e) {
+        log.warn("BookNotFoundException: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(e.getMessage());
     }
 
-    @ExceptionHandler(value
-            = {CustomerNotFoundException.class})
-    public ResponseEntity handleCustomerNotFoundException(CustomerNotFoundException e) {
-        LOG.warn("IllegalArgumentException: {}", e.getMessage());
-        return ResponseEntity.status(NOT_FOUND)
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<String> handleCustomerNotFoundException(CustomerNotFoundException e) {
+        log.warn("CustomerNotFoundException: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseBody
-    public ResponseEntity<List<String>> processUnmergeException(final
-                                                                MethodArgumentNotValidException ex) {
-
-        List<String> list = ex.getBindingResult().getAllErrors().stream()
-                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+    public ResponseEntity<List<String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult().getAllErrors().stream()
+                .map(error -> error.getDefaultMessage())
                 .collect(Collectors.toList());
-
-        return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 }
