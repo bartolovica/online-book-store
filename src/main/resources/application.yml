@@ -1,0 +1,25 @@
+server:
+  port: 9000
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        generate_statistics: false
+  h2:
+    console:
+      enabled: true
+      path: /h2
+
+book:
+  discount:
+    regular: 0.1
+    old-editions: 0.2
+    old-editions-extra: 0.05
+    zero: 0.0
+    no-discount: 1.00
+  bundle-limit: 3
